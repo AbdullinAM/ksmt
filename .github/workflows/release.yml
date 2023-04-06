@@ -19,18 +19,10 @@ jobs:
           distribution: 'zulu'
           cache: gradle
 
-      - name: Build artifacts
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: publishAllPublicationsToReleaseDirRepository
-
-      - name: Upload release artifacts
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ksmt-core/build/release/**/ksmt-core-*.jar
-            ksmt-z3/build/release/**/ksmt-z3-*.jar
-            ksmt-bitwuzla/build/release/**/ksmt-bitwuzla-*.jar
-            ksmt-yices/build/release/**/ksmt-yices-*.jar
-            ksmt-cvc5/build/release/**/ksmt-cvc5-*.jar
-            ksmt-runner/build/release/**/ksmt-runner-*.jar
+      - name: Deploy to GitHub
+        id: deploy-to-github
+        run: |
+          gradle -PforceVersion=${{ github.event.release.tag_name }} publish || echo "deploy failed" >&2
+        env:
+          DEPLOY_USERNAME: AbdullinAM
+          DEPLOY_PASSWORD: ${{ secrets.VORPAL_GITHUB_TOKEN }}
