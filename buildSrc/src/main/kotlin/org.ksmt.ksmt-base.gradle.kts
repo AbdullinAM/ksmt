@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "org.ksmt"
-version = "0.4.6-kex.0.0.1"
+version = "0.4.6-kex.0.0.2"
 
 repositories {
     mavenCentral()

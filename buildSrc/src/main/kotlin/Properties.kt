@@ -26,8 +26,8 @@ fun Project.stringProperty(name: String): String? {
 
 fun Project.stringOrEnvProperty(name: String): String? {
     if (!project.hasProperty(name)) {
-        return null
+        return System.getenv(name)
     }
 
-    return project.property(name)?.toString() ?: System.getenv(name)
+    return project.property(name).toString()
 }
