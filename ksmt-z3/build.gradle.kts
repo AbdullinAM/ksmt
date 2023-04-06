@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import java.net.URI
 
 plugins {
     id("org.ksmt.ksmt-base")
@@ -71,11 +72,24 @@ tasks.withType<ShadowJar> {
     project.configurations.shadow.get().dependencies.addAll(dependencies)
 }
 
+val deployUsername = stringOrEnvProperty("DEPLOY_USERNAME")
+val deployPassword = stringOrEnvProperty("DEPLOY_PASSWORD")
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            project.shadow.component(this)
+            from(components["java"])
             artifact(tasks["kotlinSourcesJar"])
+        }
+    }
+    repositories {
+        maven {
+            url = URI("https://maven.pkg.github.com/vorpal-research/kotlin-maven")
+            credentials {
+                username = deployUsername
+                password = deployPassword
+            }
+
         }
     }
 }

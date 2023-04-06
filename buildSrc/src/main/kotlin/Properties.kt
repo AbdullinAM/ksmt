@@ -23,3 +23,11 @@ fun Project.stringProperty(name: String): String? {
 
     return project.property(name).toString()
 }
+
+fun Project.stringOrEnvProperty(name: String): String? {
+    if (!project.hasProperty(name)) {
+        return null
+    }
+
+    return project.property(name)?.toString() ?: System.getenv(name)
+}
