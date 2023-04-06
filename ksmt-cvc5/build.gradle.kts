@@ -52,24 +52,11 @@ tasks.withType<ShadowJar> {
     project.configurations.shadow.get().dependencies.addAll(dependencies)
 }
 
-val deployUsername = stringOrEnvProperty("DEPLOY_USERNAME")
-val deployPassword = stringOrEnvProperty("DEPLOY_PASSWORD")
-
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            from(components["java"])
+            project.shadow.component(this)
             artifact(tasks["kotlinSourcesJar"])
-        }
-    }
-    repositories {
-        maven {
-            url = URI("https://maven.pkg.github.com/vorpal-research/kotlin-maven")
-            credentials {
-                username = deployUsername
-                password = deployPassword
-            }
-
         }
     }
 }

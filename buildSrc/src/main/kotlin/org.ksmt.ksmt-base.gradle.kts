@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URI
 
 plugins {
     kotlin("jvm")
@@ -9,7 +10,7 @@ plugins {
 }
 
 group = "org.ksmt"
-version = "0.4.6"
+version = "0.4.6-kex.0.0.1"
 
 repositories {
     mavenCentral()
@@ -40,11 +41,18 @@ tasks.withType<Test> {
     systemProperty("junit.jupiter.execution.parallel.enabled", true)
 }
 
+val deployUsername = stringOrEnvProperty("DEPLOY_USERNAME")
+val deployPassword = stringOrEnvProperty("DEPLOY_PASSWORD")
+
 publishing {
     repositories {
         maven {
-            name = "releaseDir"
-            url = uri(layout.buildDirectory.dir("release"))
+            url = URI("https://maven.pkg.github.com/vorpal-research/kotlin-maven")
+            credentials {
+                username = deployUsername
+                password = deployPassword
+            }
+
         }
     }
 }

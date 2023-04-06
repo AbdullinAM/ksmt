@@ -22,7 +22,7 @@ jobs:
       - name: Deploy to GitHub
         id: deploy-to-github
         run: |
-          gradle -PforceVersion=${{ github.event.release.tag_name }} publish || echo "deploy failed" >&2
+          ./gradlew -PforceVersion=${{ github.event.release.tag_name }} publish || echo "deploy failed" >&2
         env:
           DEPLOY_USERNAME: AbdullinAM
           DEPLOY_PASSWORD: ${{ secrets.VORPAL_GITHUB_TOKEN }}
