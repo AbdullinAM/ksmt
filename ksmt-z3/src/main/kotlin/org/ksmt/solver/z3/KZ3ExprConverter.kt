@@ -367,7 +367,14 @@ open class KZ3ExprConverter(
             Z3_decl_kind.Z3_OP_FPA_BV2RM -> {
                 TODO("Fp $declKind is not supported")
             }
-            else -> TODO("$declKind is not supported")
+            else -> {
+                val stringRep = Native.astToString(nCtx, expr)
+                // this is very bad, but we need to do something
+                when {
+                    stringRep.startsWith("(fp.to_ieee_bv") -> expr.convert(::mkFpToIEEEBvExpr)
+                    else -> TODO("$declKind is not supported $stringRep")
+                }
+            }
         }
     }
 
